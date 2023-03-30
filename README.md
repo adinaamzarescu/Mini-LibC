@@ -16,35 +16,35 @@ __________________________________________________________
 
 ### strcpy
 
-* The function copies the source and destination in 2 new variables.
+The function copies the source and destination in 2 new variables.
 
-* The destination will get each character from the source for as long
+The destination will get each character from the source for as long
 as the source still has charecters. 
 
 ### strncpy
 
-* The function copies the source and destination in 2 new variables
+The function copies the source and destination in 2 new variables
 
-* The destination will get each character from the source for as long as the
- source still has characters or until len is 0
+The destination will get each character from the source for as long as the 
+source still has characters or until len is 0
 
-* If all chars from the source were copied and len is not yet 0 then all other
- chars will ne NULL
+If all chars from the source were copied and len is not yet 0 then all other 
+chars will ne NULL
 
 ### strcat 
 
-* dest will point to the end in order to get the start pointer for the
-source to start appending. Then each char will be appended in a similar
+dest will point to the end in order to get the start pointer for the 
+source to start appending. Then each char will be appended in a similar 
 way as strcpy()
 
 ### strncat
 
-* Similar to strcat() but this time if len becomes 0 the appending will stop
+Similar to strcat() but this time if len becomes 0 the appending will stop
 
 ### strcmp
 
-* For as long as the 2 strings have characters and each character is the same
- in both strings, the pointer will increment
+For as long as the 2 strings have characters and each character is the same 
+in both strings, the pointer will increment
 
 * When the loop stops there are 3 cases:
 
@@ -56,103 +56,100 @@ way as strcpy()
 
 ### strncmp
 
-* This is similar to the strcmp function but in this case the code has an 
+This is similar to the strcmp function but in this case the code has an 
 aditional variable, the length
 
 ### strchr
 
-* The pointer will incremet until the character c is found or until
+The pointer will incremet until the character c is found or until 
 the reach of the end of the string
 
-* If c is '\0' then the return value will be the end of the string
+If c is '\0' then the return value will be the end of the string
 
-* The type cast (char *) is used to return a pointer to
-a non constant value because the function is not
+The type cast (char *) is used to return a pointer to 
+a non constant value because the function is not 
 modifying the content of the string
 
-* If no character is found then the function will return NULL
+If no character is found then the function will return NULL
 
 ### strrchr
 
-* The function is similar but the pointer decreseas
+The function is similar but the pointer decreseas
 
 ### strstr
 
-* The function searches for a substring withing another
+The function searches for a substring withing another 
 string
 
-* The function stores the length of the needle and the haystack
+The function stores the length of the needle and the haystack
 
-* If the len of the needle is greater than the len of
-the haystack, the function returns NULL because it is
+If the len of the needle is greater than the len of 
+the haystack, the function returns NULL because it is 
 impossible for the haystack to contain the needle
 
-* The loop will continue until there are no more possible positions within 
+The loop will continue until there are no more possible positions within 
 the haystack for needle to be found in.
 
-* the memcmp() function is used to compare the substring
+The memcmp() function is used to compare the substring 
 of the haystack depending on the iterator i
 
-* If memcmp() returns 0 then the needle has been found
+If memcmp() returns 0 then the needle has been found
 
 ### strrstr
 
-* The function searches for a substring withing another
+The function searches for a substring withing another 
 string
 
-* This is similar to the strstr() function but the search will
+This is similar to the strstr() function but the search will 
 start at the end of the string this time
-
 
 ### memcpy 
 
-* Each value is copied step by step and the pointers are incremented
+Each value is copied step by step and the pointers are incremented
 
-* The pointers are cast to char* and const char* because
+The pointers are cast to char* and const char* because 
 the function copies bytes and char is one byte
 
 ### memmove
 
-*  The function copies a specified number of bytes from a source
+The function copies a specified number of bytes from a source 
 memory location to a destination memory location, and is designed 
 to handle cases where the source and destination memory regions overlap
 
-* There are 2 cases. One in which the scr start is
+There are 2 cases. One in which the scr start is 
 lesser than the dest start. In this case the copying 
-must be done in reverse order to avoid overwriting data.
-The second case is the one in which the data won't be
-overwritten
+must be done in reverse order to avoid overwriting data. 
+The second case is the one in which the data won't be overwritten
 
 ### memcmp
 
-* The function compares the first num bytes of two
-memory regions
+The function compares the first num bytes of two memory regions
 
-* First of all the pointers are cast to const unsigned char *
+First of all the pointers are cast to const unsigned char * 
 because unsigned char is a one-byte type and this 
-ensures that the comparison is done on a byte-by-byte
-basis
+ensures that the comparison is done on a byte-by-byte basis
 
-* The function returns 0 if the memory regions are equal,
+The function returns 0 if the memory regions are equal, 
 -1 if p1 is less than p2 or 1 otherwise
 
 ### memset
 
-* The function sets the first num bytes of the memory
+The function sets the first num bytes of the memory 
 region pointed by source to the given value
 
 _______________________________________________________________________________
 
 ## IO
 
-For those functions I used the exit(long exit_code) function as
+For those functions I used the exit(long exit_code) function as 
 a refference. Then I searched in the syscall_list.h for each 
 syscall function as well as using the man pages for them.
 
 The source for error handling is the GitHub repo for the GNU C Library:
+
 https://github.com/ysat0/uClibc/blob/cf0b3a3342f24dbf601ba639bdce5b2a2f001c7a/libc/sysdeps/linux/i386/sigaction.c
 
-I found out it is easier to set the errno variable like this __set_errno(-result);
+I found out it is easier to set the errno variable like this __set_errno(-result); 
 instead of checking for each case like this:
 
         if (length < 0 || !fd) {
@@ -166,9 +163,9 @@ The function closes a file descriptor.
 
 * fd = the file descriptor to be closed
 
-* The function uses the syscall for close (number 3)
+The function uses the syscall for close (number 3)
 
-* If the system call succeeds it returns the new file offset
+If the system call succeeds it returns the new file offset
 
 * It returns 0 on success and -1 on failure
 
@@ -183,7 +180,7 @@ The function truncates a file to a specified length
 
 * length = length after the file is truncated
 
-* The function uses the syscall for ftruncate (number 77)
+The function uses the syscall for ftruncate (number 77)
 
 * If the system call succeeds it returns the new file offset, else it 
 returns -1
@@ -209,7 +206,7 @@ another option would be:
 
 * whence = the reference point for the seek operation
 
-* The function uses the syscall for lseek (number 8)
+The function uses the syscall for lseek (number 8)
 
 * If the system call succeeds it returns the new file offset, else it 
 returns -1
@@ -220,17 +217,16 @@ Source: https://man7.org/linux/man-pages/man2/lseek.2.html
 
 This function opens and possibly creates a file.
 
-* using O_CREAT from include/fcntl.h that expands to 0100
+* Using O_CREAT from include/fcntl.h that expands to 0100 
 if this flag is set then the file mode is not 0
 
-* Since the <stdarg.h> library is included the **mode** argument is
+Since the <stdarg.h> library is included the **mode** argument is 
 extracted using the va_start() and va_arg() macros.
 
 * fd = the file descriptor to be opened
 
-* The function uses the syscall for open (number 2)
-
-* If the system call succeeds it returns the new file offset
+The function uses the syscall for open (number 2). If the system 
+call succeeds it returns the new file offset
 
 * It returns the new file descriptor on success and -1 on failure
 
@@ -247,7 +243,7 @@ This function shrinks or extends the size of a file to the specified size
 
 * length = length after the file is truncated
 
-* The function uses the syscall for truncate (number 76)
+The function uses the syscall for truncate (number 76)
 
 * If the system call succeeds it returns the new file offset, else it 
 returns -1
@@ -263,7 +259,7 @@ The function writes the string s and a trailing newline to stdout.
 
 * str = the string to be written to stdout
 
-* Write the string and a newline character to the standard output using the 
+Write the string and a newline character to the standard output using the 
 write system call from read_write.c
 
 Sources: 
@@ -283,7 +279,7 @@ Get file status
 
 * I included the library <internal/types.h>
 
-Those are not external libraries, they are from the skel.
+Those are not external libraries, they are from the skel. 
 Then I searched in the syscall_list.h for each 
 syscall function as well as using the man pages for them.
 
@@ -295,8 +291,7 @@ This function stats the file pointed to by fd and fills in st
 
 * st = a pointer to the struct stat object (information about the file)
 
-
-* The function uses the syscall for fstat (number 5)
+The function uses the syscall for fstat (number 5)
 
 * It returns the result on success and -1 on failure
 
@@ -310,8 +305,7 @@ This function stats the file pointed to by path and fills in buf.
 
 * buf = a pointer to a struct stat object(information about the file)
 
-
-* The function uses the syscall for stat (number 4)
+The function uses the syscall for stat (number 4)
 
 * It returns the result on success and -1 on failure
 
@@ -333,14 +327,11 @@ specified number of seconds.
 
 * seconds = the number of seconds to sleep
 
-* The function returns void
-
 Source: https://pubs.opengroup.org/onlinepubs/9699919799/functions/sleep.html
 
 ### nanosleep
 
 The function suspends the execution of the calling thread for a specified amount of time
-
 
 _______________________________________________________________________________
 
@@ -374,7 +365,7 @@ Source: https://man7.org/linux/man-pages/man2/mmap.2.html
 
 * size = the size of each element
 
-* This function is similar to the malloc() function but in this case all
+This function is similar to the malloc() function but in this case all 
 blocks are set to 0
 
 
@@ -429,9 +420,9 @@ the old pointer will be freed.
 * size = size of each member
 
 
-* builtin_mul_overflow is used to check for integer overflow
+builtin_mul_overflow is used to check for integer overflow
 
-* Then the function behaves like realloc() with total_size bytes of memory allocation
+Then the function behaves like realloc() with total_size bytes of memory allocation
 
 Source: https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
 
