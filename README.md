@@ -426,7 +426,7 @@ Then the function behaves like realloc() with total_size bytes of memory allocat
 Source: https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
 
 
-### `mmap`
+###  `mmap`
 
 Function used to map files or devices into memory. 
 It returns a pointer to the mapped memory or -1 on error.
@@ -449,7 +449,8 @@ The function has the following parameters:
 
 Source: https://man7.org/linux/man-pages/man2/mmap.2.html
 
-### `mremap`
+
+###  `mremap`
 
 This function is similar to the mmap function but it is used to 
 remap an existing memory mapping to a new address, potentially 
@@ -467,7 +468,8 @@ The function takes four parameters:
 
 Source: https://man7.org/linux/man-pages/man2/mremap.2.html
 
-### `munmap`
+
+###  `munmap`
 
 Function used to release a range of memory that was previously 
 allocated using mmap() 
