@@ -21,7 +21,7 @@ The function copies the source and destination in 2 new variables.
 The destination will get each character from the source for as long
 as the source still has charecters. 
 
-### strncpy
+### `strncpy`
 
 The function copies the source and destination in 2 new variables
 
@@ -31,17 +31,17 @@ source still has characters or until len is 0
 If all chars from the source were copied and len is not yet 0 then all other 
 chars will ne NULL
 
-### strcat 
+### `strcat `
 
 dest will point to the end in order to get the start pointer for the 
 source to start appending. Then each char will be appended in a similar 
 way as strcpy()
 
-### strncat
+### `strncat`
 
 Similar to strcat() but this time if len becomes 0 the appending will stop
 
-### strcmp
+### `strcmp`
 
 For as long as the 2 strings have characters and each character is the same 
 in both strings, the pointer will increment
@@ -54,12 +54,12 @@ in both strings, the pointer will increment
 
     * 1 if the char in str1 is greater
 
-### strncmp
+### `strncmp`
 
 This is similar to the strcmp function but in this case the code has an 
 aditional variable, the length
 
-### strchr
+### `strchr`
 
 The pointer will incremet until the character c is found or until 
 the reach of the end of the string
@@ -72,11 +72,11 @@ modifying the content of the string
 
 If no character is found then the function will return NULL
 
-### strrchr
+### `strrchr`
 
 The function is similar but the pointer decreseas
 
-### strstr
+### `strstr`
 
 The function searches for a substring withing another 
 string
@@ -95,7 +95,7 @@ of the haystack depending on the iterator i
 
 If memcmp() returns 0 then the needle has been found
 
-### strrstr
+### `strrstr`
 
 The function searches for a substring withing another 
 string
@@ -103,14 +103,14 @@ string
 This is similar to the strstr() function but the search will 
 start at the end of the string this time
 
-### memcpy 
+### `memcpy `
 
 Each value is copied step by step and the pointers are incremented
 
 The pointers are cast to char* and const char* because 
 the function copies bytes and char is one byte
 
-### memmove
+### `memmove`
 
 The function copies a specified number of bytes from a source 
 memory location to a destination memory location, and is designed 
@@ -121,7 +121,7 @@ lesser than the dest start. In this case the copying
 must be done in reverse order to avoid overwriting data. 
 The second case is the one in which the data won't be overwritten
 
-### memcmp
+### `memcmp`
 
 The function compares the first num bytes of two memory regions
 
@@ -132,7 +132,7 @@ ensures that the comparison is done on a byte-by-byte basis
 The function returns 0 if the memory regions are equal, 
 -1 if p1 is less than p2 or 1 otherwise
 
-### memset
+### `memset`
 
 The function sets the first num bytes of the memory 
 region pointed by source to the given value
@@ -157,7 +157,7 @@ instead of checking for each case like this:
             return -1;
         }
 
-### close
+### `close`
 
 The function closes a file descriptor.
 
@@ -171,7 +171,7 @@ If the system call succeeds it returns the new file offset
 
 Source: https://man7.org/linux/man-pages/man2/close.2.html
 
-### ftruncate
+### `ftruncate`
 
 The function truncates a file to a specified length
 
@@ -187,7 +187,7 @@ returns -1
 Source: https://man7.org/linux/man-pages/man3/ftruncate.3p.html
 
 
-### lseek
+### `lseek`
 
 I had some problems with this function so I decided to add the
 errors manually in order to debug the code better. Instead of that
@@ -212,7 +212,7 @@ returns -1
 
 Source: https://man7.org/linux/man-pages/man2/lseek.2.html
 
-### open
+### `open`
 
 This function opens and possibly creates a file.
 
@@ -234,7 +234,7 @@ Sources:
 2. https://codebrowser.dev/glibc/glibc/sysdeps/unix/sysv/linux/open.c.html
 3. https://man7.org/linux/man-pages/man3/stdarg.3.html
 
-### truncate
+### `truncate`
 
 This function shrinks or extends the size of a file to the specified size
 
@@ -250,7 +250,7 @@ returns -1
 Source: https://man7.org/linux/man-pages/man1/truncate.1.html
 
 
-### puts
+### `puts`
 
 I added the header in the <stdio.h> library
 
@@ -282,7 +282,7 @@ Those are not external libraries, they are from the skel.
 Then I searched in the syscall_list.h for each 
 syscall function as well as using the man pages for them.
 
-### fstat
+### `fstat`
 
 This function stats the file pointed to by fd and fills in st
 
@@ -296,7 +296,7 @@ The function uses the syscall for fstat (number 5)
 
 Source: https://linux.die.net/man/2/fstat
 
-### stat
+### `stat`
 
 This function stats the file pointed to by path and fills in buf.
 
@@ -315,11 +315,11 @@ _______________________________________________________________________________
 
 ## Process
 
-### exit
+### `exit`
 
 The function is used to terminate a C program and return a status code to the operating system
 
-### sleep
+### `sleep`
 
 The sleep function suspends the execution of the calling thread for a 
 specified number of seconds.
@@ -328,7 +328,7 @@ specified number of seconds.
 
 Source: https://pubs.opengroup.org/onlinepubs/9699919799/functions/sleep.html
 
-### nanosleep
+### `nanosleep`
 
 The function suspends the execution of the calling thread for a specified amount of time
 
@@ -340,7 +340,7 @@ _______________________________________________________________________________
 
 * Library added: errno.h
 
-### malloc
+### `malloc`
 
 * size = number of bytes to allocate
 
@@ -358,7 +358,7 @@ After the memory has been allocated, the memory block will be added to the list.
 
 Source: https://man7.org/linux/man-pages/man2/mmap.2.html
 
-### calloc
+### `calloc`
 
 * nmemb = number of elements to allocate
 
@@ -368,7 +368,7 @@ This function is similar to the malloc() function but in this case all
 blocks are set to 0
 
 
-### free
+### `free`
 
 * ptr = pointer to the memory block to free
 
@@ -381,7 +381,7 @@ blocks are set to 0
     * Remove the block from the list using mem_list_del()
 
 
-### realloc
+### `realloc`
 
 * ptr = pointer to the memory block to realloc
 
@@ -410,7 +410,7 @@ The new memory block will be added to the list and
 the old pointer will be freed.
 
 
-### reallocarray
+### `reallocarray`
 
 * ptr = pointer to the memory block to realloc
 
@@ -426,7 +426,7 @@ Then the function behaves like realloc() with total_size bytes of memory allocat
 Source: https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
 
 
-### mmap
+### `mmap`
 
 Function used to map files or devices into memory. 
 It returns a pointer to the mapped memory or -1 on error.
@@ -449,7 +449,7 @@ The function has the following parameters:
 
 Source: https://man7.org/linux/man-pages/man2/mmap.2.html
 
-### mremap
+### `mremap`
 
 This function is similar to the mmap function but it is used to 
 remap an existing memory mapping to a new address, potentially 
@@ -467,7 +467,7 @@ The function takes four parameters:
 
 Source: https://man7.org/linux/man-pages/man2/mremap.2.html
 
-### munmap
+### `munmap`
 
 Function used to release a range of memory that was previously 
 allocated using mmap() 
