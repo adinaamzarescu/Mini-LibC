@@ -31,7 +31,7 @@ source still has characters or until len is 0
 If all chars from the source were copied and len is not yet 0 then all other 
 chars will ne NULL
 
-### `strcat `
+### `strcat`
 
 dest will point to the end in order to get the start pointer for the 
 source to start appending. Then each char will be appended in a similar 
@@ -103,7 +103,7 @@ string
 This is similar to the strstr() function but the search will 
 start at the end of the string this time
 
-### `memcpy `
+### `memcpy`
 
 Each value is copied step by step and the pointers are incremented
 
