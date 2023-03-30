@@ -364,6 +364,8 @@ _______________________________________________________________________________
 
     * 0 means to use an offset of 0 from the beginning of the file
 
+After the memory has been allocated, the memory block will be added to the list.
+
 Source: https://man7.org/linux/man-pages/man2/mmap.2.html
 
 ### calloc
@@ -394,6 +396,28 @@ blocks are set to 0
 * ptr = pointer to the memory block to realloc
 
 * size = number of bytes to allocate
+
+The function checks if the pointer is empty n which 
+case it will behave like a normal malloc.
+
+Then it checks if the size is 0, in which 
+case it will behave like a free.
+
+If not, it will then search for the pointer in 
+the list of memory blocks. When found, if the 
+requested size is smaller than the current size, 
+it will return the pointer because there is enough 
+memory.
+
+If the requested size is greater then a new pointer 
+is created and memory will be allocated to that pointer.
+
+Then the contents of the old pointer will be copied 
+to teh new one and the old memory block will be 
+removed from the list.
+
+The new pmemory block will be added to the list and 
+the old pointer will be freed.
 
 
 ### reallocarray
