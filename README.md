@@ -403,10 +403,10 @@ If the requested size is greater then a new pointer
 is created and memory will be allocated to that pointer.
 
 Then the contents of the old pointer will be copied 
-to teh new one and the old memory block will be 
+to the new one and the old memory block will be 
 removed from the list.
 
-The new pmemory block will be added to the list and 
+The new memory block will be added to the list and 
 the old pointer will be freed.
 
 
