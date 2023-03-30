@@ -14,7 +14,7 @@ __________________________________________________________
 
 ## Strings
 
-### strcpy
+### `strcpy`
 
 The function copies the source and destination in 2 new variables.
 
