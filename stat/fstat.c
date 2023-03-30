@@ -7,6 +7,7 @@
 int fstat(int fd, struct stat *st) {
     int result;
     
+    // Check if the file descriptor is valid
     if (fd < 0) {
         errno = EBADF;
         return -1;
@@ -17,7 +18,7 @@ int fstat(int fd, struct stat *st) {
     result = syscall(__NR_fstat, fd, st);
     
     // Check if the system call succeeded or failed
-    if (result == -1) {
+    if (result < 0) {
         // Error occurred
         errno = -result;
 		return -1;

@@ -1,71 +1,133 @@
-https://danluu.com/malloc-tutorial/
-https://www.javatpoint.com/calloc-in-c
-https://port70.net/~nsz/c/c11/n1570.html#7.22.3.5
-https://man7.org/linux/man-pages/man2/sbrk.2.html
-https://man7.org/linux/man-pages/man3/memcpy.3.html
-https://man7.org/linux/man-pages/man3/malloc_usable_size.3.html
-https://man.openbsd.org/reallocarray.3
+Strings
+
+## Strcpy
+
+* The function copies the source and destination in 2 new variables.
+
+* The destination will get each character from the source for as long
+as the source still has charecters. 
+
+## Strncpy
+
+* The function copies the source and destination in 2 new variables
+
+* The destination will get each character from the source for as long as the
+ source still has characters or until len is 0
+
+* If all chars from the source were copied and len is not yet 0 then all other
+ chars will ne NULL
+
+## Strcat 
+
+* dest will point to the end in order to get the start pointer for the
+source to start appending. Then each char will be appended in a similar
+way as strcpy()
+
+## Strncat
+
+* Similar to strcat() but this time if len becomes 0 the appending will stop
+
+## Strcmp
+
+* For as long as the 2 strings have characters and each character is the same
+ in both strings, the pointer will increment
+
+* When the loop stops there are 3 cases:
+
+    * 0 if the strings are equal
+
+    * -1 if the char in str2 is greater
+
+    * 1 if the char in str1 is greater
+
+## Strncmp
+
+* This is similar to the strcmp function but in this case the code has an 
+aditional variable, the length
+
+## Strchr
+
+* The pointer will incremet until the character c is found or until
+the reach of the end of the string
+
+* If c is '\0' then the return value will be the end of the string
+
+* The type cast (char *) is used to return a pointer to
+a non constant value because the function is not
+modifying the content of the string
+
+* If no character is found then the function will return NULL
+
+## Strrchr
+
+* The function is similar but the pointer decreseas
+
+## Strstr
+
+* The function searches for a substring withing another
+string
+
+* The function stores the length of the needle and the haystack
+
+* If the len of the needle is greater than the len of
+the haystack, the function returns NULL because it is
+impossible for the haystack to contain the needle
+
+* The loop will continue until there are no more possible positions within 
+the haystack for needle to be found in.
+
+* the memcmp() function is used to compare the substring
+of the haystack depending on the iterator i
+
+* If memcmp() returns 0 then the needle has been found
+
+## Strrstr
+
+* The function searches for a substring withing another
+string
+
+* This is similar to the strstr() function but the search will
+start at the end of the string this time
 
 
-MM
-* Library added: errno.h
+## Memcpy 
 
-## Malloc
+* Each value is copied step by step and the pointers are incremented
 
-* size = number of bytes to allocate
+* The pointers are cast to char* and const char* because
+the function copies bytes and char is one byte
 
-* The function allocates memory using **sbrk** (the return value is a pointer to the start of the newly allocated memory block)
-* sbrk fails if it returns the special value (void*)-1
+## Memmove
 
-Source: https://man7.org/linux/man-pages/man2/sbrk.2.html
+*  The function copies a specified number of bytes from a source
+memory location to a destination memory location, and is designed 
+to handle cases where the source and destination memory regions overlap
 
-## Calloc
+* There are 2 cases. One in which the scr start is
+lesser than the dest start. In this case the copying 
+must be done in reverse order to avoid overwriting data.
+The second case is the one in which the data won't be
+overwritten
 
-* nmemb = number of elements to allocate
-* size = the size of each element
+## Memcmp
 
-* Firstly the function calculates the total size of the memory block
-* Now that malloc is implemented, calloc will use the malloc function to allocate memory
-* If the allocation was sucessful the memory will be set to 0
+* The function compares the first num bytes of two
+memory regions
 
-Source: https://port70.net/~nsz/c/c11/n1570.html#7.22.3.1
+* First of all the pointers are cast to const unsigned char *
+because unsigned char is a one-byte type and this 
+ensures that the comparison is done on a byte-by-byte
+basis
 
-## Free
+* The function returns 0 if the memory regions are equal,
+-1 if p1 is less than p2 or 1 otherwise
 
-* ptr = pointer to the memory block to free
+## Memset
 
-* Since the memory was allocated with sbrk the free will also use sbrk
-* The free function returns no value
-* sbrk moves the program forward to allocate the requested memory so when free() is called the program needs to be moved back
+* The function sets the first num bytes of the memory
+region pointed by source to the given value
 
-Source: https://man7.org/linux/man-pages/man2/sbrk.2.html
-
-## Realloc
-
-* ptr = pointer to the memory block to realloc
-* size = number of bytes to allocate
-
-* If the pointer is null the memory is allocated directly using malloc
-* If the requested size is zero, free the memory block and return NULL
-* Allocate memory using malloc()
-* Copy memory using memcpy()
-* Free the old pointer
-* Return the new pointers
-
-Source: https://man7.org/linux/man-pages/man3/malloc_usable_size.3.html
-
-## Reallocarray
-
-* ptr = pointer to the memory block to realloc
-* nmemb = number of members in the new block of memory
-* size = size of each member
-
-* This function is similar to the realloc function but in addition it checks 
-for integer overflow using __builtin_mul_overflow()
-* __builtin_mul_overflow() : the first argument is the first 2 arguments are the values of the integers to be multiplied and the 3rd argument is a pointer to the variable where the result will be stored in. If the function return 0 then there is no overflow and the result is stored in the **new_size** variable
-
-Source: https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
-
+_______________________________________________________________________________
 
 IO
 
@@ -73,10 +135,25 @@ For those functions I used the exit(long exit_code) function as
 a refference. Then I searched in the syscall_list.h for each 
 syscall function as well as using the man pages for them.
 
+The source for error handling is the GitHub repo for the GNU C Library:
+https://github.com/ysat0/uClibc/blob/cf0b3a3342f24dbf601ba639bdce5b2a2f001c7a/libc/sysdeps/linux/i386/sigaction.c
+
+I found out it is easier to set the errno variable like this __set_errno(-result);
+instead of checking for each case like this:
+
+        if (length < 0 || !fd) {
+            errno = EINVAL;
+            return -1;
+        }
+
 ## Close
 
+The function closes a file descriptor.
+
 * fd = the file descriptor to be closed
+
 * The function uses the syscall for close (number 3)
+
 * If the system call succeeds it returns the new file offset
 
 * It returns 0 on success and -1 on failure
@@ -86,59 +163,111 @@ Source: https://man7.org/linux/man-pages/man2/close.2.html
 
 ## Ftruncate
 
+The function truncates a file to a specified length
+
 * fd = the file descriptor of the file to be truncated
+
 * length = length after the file is truncated
 
 * The function uses the syscall for ftruncate (number 77)
-* If the system call succeeds it returns the new file offset, else it returns -1
+
+* If the system call succeeds it returns the new file offset, else it 
+returns -1
 
 Source: https://man7.org/linux/man-pages/man3/ftruncate.3p.html
 
 
 ## Lseek
 
+I had some problems with this function so I decided to add the
+errors manually in order to debug the code better. Instead of that
+another option would be:
+
+        if (result < 0) {
+            // Error occurred
+            errno = -result;
+            return -1;
+        }
+
 * fd = file descriptor to be operated on
+
 * offset = the offset to seek on
+
 * whence = the reference point for the seek operation
 
 * The function uses the syscall for lseek (number 8)
-* If the system call succeeds it returns the new file offset, else it returns -1
+
+* If the system call succeeds it returns the new file offset, else it 
+returns -1
 
 Source: https://man7.org/linux/man-pages/man2/lseek.2.html
 
 ## Open
 
+This function opens and possibly creates a file.
+
 * using O_CREAT from include/fcntl.h that expands to 0100
 if this flag is set then the file mode is not 0
+
 * Since the <stdarg.h> library is included the **mode** argument is
 extracted using the va_start() and va_arg() macros.
 
 * fd = the file descriptor to be opened
-* The function uses the syscall for open (number 3)
+
+* The function uses the syscall for open (number 2)
+
 * If the system call succeeds it returns the new file offset
 
-* It returns 0 on success and -1 on failure
+* It returns the new file descriptor on success and -1 on failure
 
 Sources: 
 1. https://man7.org/linux/man-pages/man2/open.2.html
-2. https://en.wikipedia.org/wiki/Stdarg.h
+2. https://codebrowser.dev/glibc/glibc/sysdeps/unix/sysv/linux/open.c.html
+3. https://man7.org/linux/man-pages/man3/stdarg.3.html
 
 ## Truncate
 
+This function shrinks or extends the size of a file to the specified size
+
 * path = the path of the file to be truncated
+
 * length = length after the file is truncated
 
 * The function uses the syscall for truncate (number 76)
-* If the system call succeeds it returns the new file offset, else it returns -1
+
+* If the system call succeeds it returns the new file offset, else it 
+returns -1
 
 Source: https://man7.org/linux/man-pages/man1/truncate.1.html
 
 
+## Puts
+
+I added the header in the <stdio.h> library
+
+The function writes the string s and a trailing newline to stdout.
+
+* str = the string to be written to stdout
+
+* Write the string and a newline character to the standard output using the 
+write system call from read_write.c
+
+Sources: 
+1. https://port70.net/~nsz/c/c11/n1570.html#7.21.7.3
+2. https://man7.org/linux/man-pages/man3/puts.3.html
+
+
+
+_______________________________________________________________________________
+
+
 STAT
 
-* I included the library #include <internal/syscall.h>
+Get file status
 
-* I included the library #include <internal/types.h>
+* I included the library <internal/syscall.h>
+
+* I included the library <internal/types.h>
 
 Those are not external libraries, they are from the skel.
 Then I searched in the syscall_list.h for each 
@@ -146,83 +275,187 @@ syscall function as well as using the man pages for them.
 
 ## Fstat
 
+This function stats the file pointed to by fd and fills in st
+
 * fd = the file descriptor of the opened file
+
 * st = a pointer to the struct stat object (information about the file)
 
+
 * The function uses the syscall for fstat (number 5)
-* It returns 0 on success and -1 on failure
+
+* It returns the result on success and -1 on failure
 
 Source: https://linux.die.net/man/2/fstat
 
 ## Stat
 
+This function stats the file pointed to by path and fills in buf.
+
 * path = the path of the file to be examinated
+
 * buf = a pointer to a struct stat object(information about the file)
 
+
 * The function uses the syscall for stat (number 4)
-* It returns 0 on success and -1 on failure
+
+* It returns the result on success and -1 on failure
 
 Source: https://man7.org/linux/man-pages/man2/lstat.2.html
 
-String
 
-## Strcpy
+_______________________________________________________________________________
 
-* The function copies the source and destination in 2 new variables.
-* The destination will get each character from the source for as long
-as the source still has charecters. 
+Process
 
-## Strncpy
+## Exit
 
-* The function copies the source and destination in 2 new variables
-* The destination will get each character from the source for as long as the source still has characters or until len is 0
-* If all chars from the source were copied and len is not yet 0 then all other chars will ne NULL
+The function is used to terminate a C program and return a status code to the operating system
 
-## Strcat 
+## Sleep
 
-* dest will point to the end in order to get the start ponter for the
-source to start appending. Then each char will be appended
+The sleep function suspends the execution of the calling thread for a 
+specified number of seconds.
 
-## Strncat
+* seconds = the number of seconds to sleep
 
-* Similar to strcat but this time if len becomes 0 the appending will stop
+* The function returns void
 
-## Strcmp
+Source: https://pubs.opengroup.org/onlinepubs/9699919799/functions/sleep.html
 
-* For as long as the 2 strings have characters and each character is the same in both strings, the pointer will increment.
-* When the loop stops there are 3 cases:
-    * 0 if the strings are equal
-    * -1 if str2 is greater
-    * 1 if str1 is greater
+## Nanosleep
 
-## Strncmp
+The function suspends the execution of the calling thread for a specified amount of time
 
-* This is similar to the strcmp function but in this case the code 
-is in a for loop that only checks for len characters
 
-## Strchr
+_______________________________________________________________________________
 
-* The pointer will incremet until the character c is found or until
-the end of the string
-* If c is '\0' then the return value will be the end of the string
-* If no character is found then the function will return NULL
 
-## Strrchr
 
-* The function is similar but the pointer decreseas
+MM
+* Library added: errno.h
 
-## Strstr !!!
+## Malloc
 
-* The function stores the length of the needle and the haystack
-* if the second string is longer then the function will return NULL
-* Using memcmp the function tests if the needle is in the haystack 
+* size = number of bytes to allocate
 
-## Strrstr !!!
+* mmap();
 
-## Memcpy 
+    * MAP_PRIVATE means that changes to the memory are not visible to other processes
 
-* Each value is copied step by step and the pointers are incremented;
+    * MAP_ANONYMOUS means that the memory is not backed by a file
 
-## Memmove
+    * -1 means to use the default file descriptor (which is not used in this case)
 
-* 
+    * 0 means to use an offset of 0 from the beginning of the file
+
+Source: https://man7.org/linux/man-pages/man2/mmap.2.html
+
+## Calloc
+
+* nmemb = number of elements to allocate
+
+* size = the size of each element
+
+* This function is similar to the malloc() function but in this case all
+blocks are set to 0
+
+
+## Free
+
+* ptr = pointer to the memory block to free
+
+* The steps for the free are:
+
+    * Search for the memory block in the memory list
+
+    * Unmap the memory block using the munmap function
+
+    * Remove the block from the list using mem_list_del()
+
+
+## Realloc
+
+* ptr = pointer to the memory block to realloc
+
+* size = number of bytes to allocate
+
+
+## Reallocarray
+
+* ptr = pointer to the memory block to realloc
+
+* nmemb = number of members in the new block of memory
+
+* size = size of each member
+
+
+* builtin_mul_overflow is used to check for integer overflow
+
+* Then the function behaves like realloc() with total_size bytes of memory allocation
+
+Source: https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
+
+
+## Mmap
+
+Function used to map files or devices into memory. 
+It returns a pointer to the mapped memory or -1 on error.
+
+* The function uses the syscall() function
+
+The function has the following parameters:
+
+* addr: the starting address of the memory region to be allocated
+
+* length: the size of the memory region to be allocated, in bytes
+
+* prot: the memory protection flags for the allocated region
+
+* flags: additional flags that control the behavior of the allocation
+
+* fd: a file descriptor for a file that will be mapped into the memory region
+
+* offset: the offset within the file at which the mapping will start
+
+Source: https://man7.org/linux/man-pages/man2/mmap.2.html
+
+## Mremap
+
+This function is similar to the mmap function but it is used to 
+remap an existing memory mapping to a new address, potentially 
+changing its size.
+
+The function takes four parameters:
+
+* old_address: a pointer to the start of the existing memory mapping
+
+* old_size: the size of the existing memory mapping
+
+* new_size: the new size for the memory mapping
+
+* flags: flags to control the behavior of the remapping operation
+
+Source: https://man7.org/linux/man-pages/man2/mremap.2.html
+
+## Munmap
+
+Function used to release a range of memory that was previously 
+allocated using mmap() 
+
+It takes two arguments:
+
+* addr: a pointer to the start of the memory range to be unmapped
+* length: the length of the memory range to be unmapped
+
+Source: https://man7.org/linux/man-pages/man2/munmap.2.html
+
+
+_______________________________________________________________________________
+
+General resources:
+
+1. https://kremlin.cc/k&r.pdf
+2. https://musl.libc.org/
+3. https://ocw.cs.pub.ro/courses/so
+4. https://openai.com/blog/chatgpt

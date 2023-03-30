@@ -40,15 +40,12 @@ struct statx {
 	uint64_t spare[14];
 };
 
-int fstatat_statx(int fd, const char *restrict path, struct stat *restrict st, int flag)
-{
+// int fstatat_statx(int fd, const char *restrict path, struct stat *restrict st, int flag)
+// {
+// 	return -1;
+// }
 
-	return -1;
-
-}
-
-int fstatat(int fd, const char *restrict path, struct stat *restrict st, int flag)
-{
-	/* TODO: Implement fstatat(). Use fstatat_statx(). */
-	return -1;
-}
+// int fstatat(int fd, const char *restrict path, struct stat *restrict st, int flag)
+// {
+// 	return -1;
+// }

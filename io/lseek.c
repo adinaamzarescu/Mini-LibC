@@ -8,11 +8,24 @@
 off_t lseek(int fd, off_t offset, int whence) {
     off_t result;
 
+    // Here I included the errors manually
+    // instead of using the (if (result < 0)) option
+    // in order to debug the code easier
+
+    // Check if the whence value is valid and if the offset
+    // is non-negative
+    // SEEK_SET 0
+    // SEEK_CUR 1
+    // SEEK_END 2
+
+    // If not, the error should be invalid argument error
     if (whence < 0 || whence > 2 || offset < 0) {
         errno = EINVAL;
         return (off_t)-1;
     }
 
+    // If the file descriptor is negative then the error
+    // should be bad file descriptor
     if (fd < 0) {
         errno = EBADF;
         return (off_t)-1;

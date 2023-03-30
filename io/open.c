@@ -7,14 +7,20 @@
 
 int open(const char *filename, int flags, ...)
 {
+    // Default mode
     mode_t mode = 0;
     
     // If the O_CREAT flag is set, 
 	// If flags exist and if the O_CREAT flag exist
     if (flags && O_CREAT) {
+        // Used to define a list of arguments
+        // whose number and types is not known
         va_list valist;
-        va_start(valist, 1);
+        // Initialize the list with the mode_t type
+        va_start(valist, flags);
+        // va_arg returns the next argument
         mode = va_arg(valist, mode_t);
+        // clean up the valist
         va_end(valist);
     }
     int result;

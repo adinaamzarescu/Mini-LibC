@@ -8,7 +8,9 @@
 int truncate(const char *path, off_t length) {
     int result;
 
+    // Check if length is valid
     if (length < 0) {
+        // Error occurred
         errno = EINVAL;
         return -1;
     }

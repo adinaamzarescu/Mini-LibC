@@ -12,7 +12,7 @@ int close(int fd) {
     result = syscall(__NR_close , fd);
     
     // Check if the system call succeeded or failed
-    if (result == -1) {
+    if (result < 0) {
         // Error occurred
         errno = -result;
         return -1;

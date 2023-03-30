@@ -1,6 +1,6 @@
 NASM = nasm
 CPPFLAGS = -nostdinc -Iinclude
-CFLAGS = -fno-PIC -fno-stack-protector -fno-builtin
+CFLAGS = -Wall -Wextra -fno-PIC -fno-stack-protector -fno-builtin
 # Remove the line below to disable debugging support.
 CFLAGS += -g -O0
 
@@ -36,5 +36,3 @@ clean:
 	-rm -f *~
 	-rm -f $(OBJS) crt/start.o
 	-rm -f libc.a
-
-# -Wall -Wextra 

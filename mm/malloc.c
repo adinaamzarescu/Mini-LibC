@@ -13,14 +13,19 @@
 
 void *malloc(size_t size)
 {
+	// Use the mmap() system call to allocate size bytes of memory with read and write permissions
 	void *mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+	// Check if the mmap() call was successful
 	if (mem == MAP_FAILED)
 	{
 		return NULL;
 	}
 
+	// Add the allocated memory to a list of memory blocks
 	if (mem_list_add(mem, size) != 0)
 	{
+		// If adding to the list failed, unmap the memory and return NULL
 		munmap(mem, size);
 		return NULL;
 	}
@@ -30,86 +35,110 @@ void *malloc(size_t size)
 
 void *calloc(size_t nmemb, size_t size)
 {
-	/* TODO: Implement malloc(). */
-	size_t total_size = nmemb * size;
-	void *ptr = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if (ptr == MAP_FAILED)
+	// Calculate the total size of the memory block to be allocated
+	size_t size_total = nmemb * size;
+	
+	// Use mmap() to allocate the memory block with read and write permissions
+	void *mem = mmap(NULL, size_total, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+	// Check if mmap() call was successful
+	if (mem == MAP_FAILED)
 	{
 		return NULL;
 	}
-	memset(ptr, 0, total_size);
-	mem_list_add(ptr, total_size);
-	return ptr;
+
+	// Set all the bytes in the memory block to 0
+	memset(mem, 0, size_total);
+
+	// Add the allocated memory to a list of memory blocks
+	if (mem_list_add(mem, size_total) != 0)
+	{
+		// If adding to the list failed, unmap the memory and return NULL
+		munmap(mem, size_total);
+		return NULL;
+	}
+
+	return mem;
 }
 
 void free(void *ptr)
 {
-   if (ptr == NULL) {
+   if (!ptr) {
        return;
    }
-    struct mem_list *list = mem_list_find(ptr);
-    if (list == NULL) {
-        return;
-    }
-    int r = munmap(list->start, list->len);
-    if (r < 0) {
-//        errno = -r;
-        return;
-    }
+	// Find the memory block in the memory list
+	struct mem_list *list = mem_list_find(ptr);
 
-    int res = mem_list_del(ptr);
+	// If the memory block is not found, return
+	if (!list) {
+		return;
+	}
+
+	// Unmap the memory block using munmap()
+	int result = munmap(list->start, list->len);
+
+	// If munmap() fails, set errno and return
+	if (result < 0) {
+		errno = -result;
+		return;
+	}
+
+	// Remove the memory block from the memory list
+	int res = mem_list_del(ptr);
+	if (!res) {
+		return;
+	}
 }
 
 void *realloc(void *ptr, size_t size)
 {
-	/* TODO: Implement realloc(). */
-	if (ptr == NULL)
+	// Behave like malloc() with size bytes of memory allocation
+	if (!ptr)
 	{
-		// If ptr is NULL, realloc should behave like malloc.
 		return malloc(size);
 	}
 
-	if (size == 0)
+	// Realloc() behaves like free()
+	if (!size)
 	{
-		// If size is zero, realloc should behave like free.
 		free(ptr);
 		return NULL;
 	}
 
+	// Find the memory block associated with ptr in the list of memory blocks
 	struct mem_list *mem_block = mem_list_find(ptr);
-	if (mem_block == NULL)
+	if (!mem_block)
 	{
-		// ptr does not point to a block allocated by mem_list_add.
 		return NULL;
 	}
 
+	// If the requested size is smaller than or equal to the current size of the memory block, return ptr
 	if (size <= mem_block->len)
 	{
-		// The new size is smaller or equal to the current size.
 		return ptr;
 	}
 
-	// Allocate a new memory block with the desired size.
+	// Allocate a new memory block of size bytes using malloc()
 	void *new_ptr = malloc(size);
-	if (new_ptr == NULL)
+	if (!new_ptr)
 	{
 		return NULL;
 	}
 
-	// Copy the contents of the old block to the new block.
+	// Copy the contents of the old memory block to the new memory block
 	memcpy(new_ptr, ptr, mem_block->len);
 
-	// Free the old memory block.
+	// Remove the old memory block from the list of memory blocks
 	int result = mem_list_del(ptr);
-	if (result != 0)
+	if (result)
 	{
 		free(new_ptr);
 		return NULL;
 	}
 
-	// Add the new memory block to the memory list.
+	// Add the new memory block to the list of memory blocks
 	result = mem_list_add(new_ptr, size);
-	if (result != 0)
+	if (result)
 	{
 		free(new_ptr);
 		return NULL;
@@ -120,48 +149,13 @@ void *realloc(void *ptr, size_t size)
 
 void *reallocarray(void *ptr, size_t nmemb, size_t size)
 {
-	/* TODO: Implement reallocarray(). */
-	size_t total_size;
-	void *new_ptr;
+    // Check for integer overflow
+    size_t total_size;
+    if (__builtin_mul_overflow(nmemb, size, &total_size))
+    {
+        return NULL;
+    }
 
-	/* Check for multiplication overflow */
-	if (__builtin_mul_overflow(nmemb, size, &total_size))
-	{
-		return NULL;
-	}
-
-	/* Check for integer overflow */
-	if (__builtin_add_overflow(total_size, sizeof(size_t), &total_size))
-	{
-		return NULL;
-	}
-
-	/* Reallocate memory */
-	new_ptr = syscall(__NR_mmap, ptr, total_size, PROT_READ | PROT_WRITE,
-					  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if (new_ptr == MAP_FAILED)
-	{
-		return NULL;
-	}
-
-	/* Copy old data to new memory if necessary */
-	if (ptr != NULL)
-	{
-		size_t old_size = *(size_t *)ptr;
-		if (old_size < total_size)
-		{
-			memcpy(new_ptr, ptr, old_size);
-		}
-		else
-		{
-			memcpy(new_ptr, ptr, total_size);
-		}
-		/* Free old memory */
-		syscall(__NR_munmap, ptr, old_size);
-	}
-
-	/* Store the size of the new allocation */
-	*(size_t *)new_ptr = total_size;
-
-	return (void *)((size_t)new_ptr + sizeof(size_t));
+    // Behave like realloc() with total_size bytes of memory allocation
+    return realloc(ptr, total_size);
 }
