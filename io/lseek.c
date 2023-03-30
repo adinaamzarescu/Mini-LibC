@@ -14,6 +14,7 @@ off_t lseek(int fd, off_t offset, int whence) {
 
     // Check if the whence value is valid and if the offset
     // is non-negative
+    
     // SEEK_SET 0
     // SEEK_CUR 1
     // SEEK_END 2

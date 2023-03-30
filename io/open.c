@@ -20,7 +20,7 @@ int open(const char *filename, int flags, ...)
         va_start(valist, flags);
         // va_arg returns the next argument
         mode = va_arg(valist, mode_t);
-        // clean up the valist
+        // Clean up the valist
         va_end(valist);
     }
     int result;

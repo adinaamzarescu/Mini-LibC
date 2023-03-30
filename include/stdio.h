@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-// Add puts() declaration
+// Added puts()
 
 int puts(const char *str);
 

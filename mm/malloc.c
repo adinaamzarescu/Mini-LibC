@@ -23,7 +23,7 @@ void *malloc(size_t size)
 	}
 
 	// Add the allocated memory to a list of memory blocks
-	if (mem_list_add(mem, size) != 0)
+	if (mem_list_add(mem, size))
 	{
 		// If adding to the list failed, unmap the memory and return NULL
 		munmap(mem, size);
@@ -51,7 +51,7 @@ void *calloc(size_t nmemb, size_t size)
 	memset(mem, 0, size_total);
 
 	// Add the allocated memory to a list of memory blocks
-	if (mem_list_add(mem, size_total) != 0)
+	if (mem_list_add(mem, size_total))
 	{
 		// If adding to the list failed, unmap the memory and return NULL
 		munmap(mem, size_total);

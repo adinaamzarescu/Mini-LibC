@@ -18,6 +18,6 @@ int close(int fd) {
         return -1;
     } else {
         // Call succeeded
-        return 0;
+        return result;
     }
 }
