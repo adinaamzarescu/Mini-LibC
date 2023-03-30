@@ -167,10 +167,9 @@ The function uses the syscall for close (number 3)
 
 If the system call succeeds it returns the new file offset
 
-* It returns 0 on success and -1 on failure
+* It returns -1 on failure
 
 Source: https://man7.org/linux/man-pages/man2/close.2.html
-
 
 ### ftruncate
 
