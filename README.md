@@ -489,6 +489,5 @@ General resources:
 1. https://kremlin.cc/k&r.pdf
 2. https://musl.libc.org/
 3. https://ocw.cs.pub.ro/courses/so
-4. https://openai.com/blog/chatgpt
 
 _______________________________________________________________________________
